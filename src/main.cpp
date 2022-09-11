@@ -9,12 +9,6 @@
 #define MIN           0
 #define INI_POS       90
 
-// EXCLUIR APÒS TESTES
-#define LED1          4
-#define LED2          5
-//EXCLUIR APÓS TESTES
-
-
 void configSerial();
 void controle();
 void configPins();
@@ -22,6 +16,7 @@ void configServo();
 void ativaServo(int cont);
 
 Servo servo_motor;
+int count = servo_motor.read();
 
 void setup() {
   configSerial();
@@ -31,38 +26,20 @@ void setup() {
 
 void loop() {
   controle();
-  delay(1000);
+  delay(100);
 }
 
 void controle(){
 
   int pos = servo_motor.read();
-  Serial.print("Angulo atual = ");
-  Serial.println(pos);
   
-  while (digitalRead (BOTAO_CRE) == 0 && pos <= MAX){
-    //EXCLUIR APÓS TESTES
-    digitalWrite(LED1, HIGH);
-    digitalWrite(LED2, LOW);
-    //EXCLUIR APÓS TESTES
-
-    Serial.println("Incrementando");
-    ativaServo(pos);
-    Serial.print("Setando Angulo para: ");
-    Serial.println(pos);
-    pos ++;
+  if (digitalRead (BOTAO_CRE) == 0 && pos < MAX){
+    ativaServo(count);
+    count  ++;
   }
-  while (digitalRead(BOTAO_DEC) == 0 && pos > MIN){
-    //EXCLUIR APÓS TESTES
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, HIGH);
-    //EXCLUIR APÓS TESTES
-   
-    Serial.println("Decrementando");
-    ativaServo(pos);
-     Serial.print("Setando Angulo para: ");
-    Serial.println(pos);
-    pos --;
+  if (digitalRead(BOTAO_DEC) == 0 && pos > MIN){
+    ativaServo(count);
+    count  --;
   }
 }
 
@@ -72,11 +49,6 @@ void configSerial(){
 
 void configPins(){
   
-  //EXCLUIR APÓS TESTES
-  pinMode(LED1, OUTPUT);
-  pinMode(LED2, OUTPUT);
-  //EXCLUIR APÓS TESTES
-
   pinMode(BOTAO_CRE, INPUT_PULLUP);
   pinMode(BOTAO_DEC, INPUT_PULLUP);
 }
